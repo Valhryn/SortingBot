@@ -1,0 +1,5 @@
+Name: Player One
+Type: Hard, Hardscore
+Days: Monday, Tuesday
+Times: Morning, Early Afternoon
+Jobs: WAR, DRK, RDM
