@@ -16,4 +16,29 @@ class Player:
         self.jobs = self.jobs[1:]
 
 
-new_player = Player(player_based_information[0])
+members = []
+for paragraphs in player_based_information:
+    members.append(Player(paragraphs))
+
+
+def align_days_and_times():
+    day_splits = [[]] * 7
+    for member in members:
+        if member.days == "All":
+            for day in day_splits:
+                day.append(member)
+        else:
+            if member.days.contains("Monday"):
+                day_splits[0].append(member)
+            if member.days.contains("Tuesday"):
+                day_splits[1].append(member)
+            if member.days.contains("Wednesday"):
+                day_splits[2].append(member)
+            if member.days.contains("Thursday"):
+                day_splits[3].append(member)
+            if member.days.contains("Friday"):
+                day_splits[4].append(member)
+            if member.days.contains("Saturday"):
+                day_splits[5].append(member)
+            if member.days.contains("Sunday"):
+                day_splits[6].append(member)
