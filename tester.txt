@@ -1,5 +1,11 @@
 Name: Player One
-Type: Hard, Hardscore
+Type: Hard, Hardcore
 Days: Monday, Tuesday
 Times: Morning, Early Afternoon
 Jobs: WAR, DRK, RDM
+
+Name: Player Two
+Type: Hard, Hardcore
+Days: Tuesday, Wednesday
+Times: Early Afternoon, Afternoon
+Jobs: WHM, GNB, DNC
