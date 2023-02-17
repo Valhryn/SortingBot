@@ -14,11 +14,17 @@ class Player:
         self.jobs = lines[4].split(", ")
         self.preferred_job = self.jobs[0]
         self.jobs = self.jobs[1:]
+        self.static_job = self.preferred_job
+
+    def __repr__(self):
+        return str(self.name) + " playing " + str(self.static_job)
 
 
 members = []
 for paragraphs in player_based_information:
     members.append(Player(paragraphs))
+
+print(members)
 
 
 def align_days_and_times():
