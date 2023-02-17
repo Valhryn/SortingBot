@@ -17,7 +17,7 @@ class Player:
         self.static_job = self.preferred_job
 
     def __repr__(self):
-        return str(self.name) + " playing " + str(self.static_job)
+        return str(self.name) + " playing " + str(self.static_job) + " on " + str(self.days)
 
 
 members = []
@@ -34,17 +34,23 @@ def align_days_and_times():
             for day in day_splits:
                 day.append(member)
         else:
-            if member.days.contains("Monday"):
+            if member.days.count("Monday") != 0:
                 day_splits[0].append(member)
-            if member.days.contains("Tuesday"):
+            if member.days.count("Tuesday") != 0:
                 day_splits[1].append(member)
-            if member.days.contains("Wednesday"):
+            if member.days.count("Wednesday") != 0:
                 day_splits[2].append(member)
-            if member.days.contains("Thursday"):
+            if member.days.count("Thursday") != 0:
                 day_splits[3].append(member)
-            if member.days.contains("Friday"):
+            if member.days.count("Friday") != 0:
                 day_splits[4].append(member)
-            if member.days.contains("Saturday"):
+            if member.days.count("Saturday") != 0:
                 day_splits[5].append(member)
-            if member.days.contains("Sunday"):
+            if member.days.count("Sunday") != 0:
                 day_splits[6].append(member)
+
+        print(day_splits)
+
+    return day_splits
+
+print(align_days_and_times())
