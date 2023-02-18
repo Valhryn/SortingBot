@@ -87,4 +87,38 @@ def align_clear_times(member_list):
 
     return clear_times
 
+def align_times(member_list):
+    possible_times = {
+        "Dead of Night": [],
+        "Early Bird Morning": [],
+        "Morning": [],
+        "Afternoon": [],
+        "Early Evening": [],
+        "Evening": [],
+        "Night": [],
+    }
+    for member in member_list:
+        if member.times == "All":
+            for value in possible_times.values():
+                value.append(member)
+        else:
+            if member.times.count("Dead of Night") != 0:
+                possible_times["Dead of Night"].append(member)
+            if member.times.count("Early Bird Morning") != 0:
+                possible_times["Early Bird Morning"].append(member)
+            if member.times.count("Morning") != 0:
+                possible_times["Morning"].append(member)
+            if member.times.count("Afternoon") != 0:
+                possible_times["Afternoon"].append(member)
+            if member.times.count("Early Evening") != 0:
+                possible_times["Early Evening"].append(member)
+            if member.times.count("Evening") != 0:
+                possible_times["Evening"].append(member)
+            if member.times.count("Night") != 0:
+                possible_times["Night"].append(member)
+
+        # print(possible_times)
+
+    return possible_times
+
 print(align_clear_times(members))
