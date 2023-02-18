@@ -62,5 +62,29 @@ def align_days(member_list):
 
     return days_of_players
 
+def align_clear_times(member_list):
+    clear_times = {
+        "Hard": [],
+        "Hardcore": [],
+        "Midcore": [],
+        "Casual": [],
+    }
+    for member in member_list:
+        if member.days == "All":
+            for value in clear_times.values():
+                value.append(member)
+        else:
+            if member.content_length.count("Hard") != 0:
+                clear_times["Hard"].append(member)
+            if member.content_length.count("Hardcore") != 0:
+                clear_times["Hardcore"].append(member)
+            if member.content_length.count("Midcore") != 0:
+                clear_times["Midcore"].append(member)
+            if member.content_length.count("Casual") != 0:
+                clear_times["Casual"].append(member)
 
-print(align_days(members))
+        # print(clear_times)
+
+    return clear_times
+
+print(align_clear_times(members))
