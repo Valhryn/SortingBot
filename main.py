@@ -17,40 +17,49 @@ class Player:
         self.static_job = self.preferred_job
 
     def __repr__(self):
-        return str(self.name) + " playing " + str(self.static_job) + " on " + str(self.days)
+        return str(self.name)
+
+    def player_tester(self):
+        return str(self.name) + " on days " + str(self.days)
 
 
 members = []
 for paragraphs in player_based_information:
     members.append(Player(paragraphs))
 
-print(members)
 
-
-def align_days_and_times():
-    day_splits = [[]] * 7
+def align_days():
+    days_of_players = {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+        "Saturday": [],
+        "Sunday": [],
+    }
     for member in members:
         if member.days == "All":
-            for day in day_splits:
-                day.append(member)
+            for value in days_of_players.values():
+                value.append(member)
         else:
             if member.days.count("Monday") != 0:
-                day_splits[0].append(member)
+                days_of_players["Monday"].append(member)
             if member.days.count("Tuesday") != 0:
-                day_splits[1].append(member)
+                days_of_players["Tuesday"].append(member)
             if member.days.count("Wednesday") != 0:
-                day_splits[2].append(member)
+                days_of_players["Wednesday"].append(member)
             if member.days.count("Thursday") != 0:
-                day_splits[3].append(member)
+                days_of_players["Thursday"].append(member)
             if member.days.count("Friday") != 0:
-                day_splits[4].append(member)
+                days_of_players["Friday"].append(member)
             if member.days.count("Saturday") != 0:
-                day_splits[5].append(member)
+                days_of_players["Saturday"].append(member)
             if member.days.count("Sunday") != 0:
-                day_splits[6].append(member)
+                days_of_players["Sunday"].append(member)
 
-        print(day_splits)
+        #print(days_of_players)
 
-    return day_splits
+    return days_of_players
 
-print(align_days_and_times())
+print(align_days())
