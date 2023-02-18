@@ -123,8 +123,8 @@ def align_times(member_list):
 
 def create_party(day, time, clear_time, member_list):
     members_that_fit = [member for member in member_list if (member.days.count(day) != 0 and member.times.count(time) != 0 and member.content_length.count(clear_time) != 0)]
-    print(members_that_fit)
+    return members_that_fit
 
-print(align_clear_times(members))
+#print(align_clear_times(members))
 
-create_party("Friday", "Afternoon", "Hard", members)
+print(create_party("Friday", "Afternoon", "Hard", members))
