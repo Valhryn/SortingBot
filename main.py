@@ -1,4 +1,4 @@
-file = open('tester.txt', 'r')
+file = open('dark.txt', 'r')
 player_based_information = file.read().split("\n\n")
 
 
@@ -40,23 +40,21 @@ def align_days(member_list):
     }
     for member in member_list:
         if member.days == "All":
-            for value in days_of_players.values():
-                value.append(member)
-        else:
-            if member.days.count("Monday") != 0:
-                days_of_players["Monday"].append(member)
-            if member.days.count("Tuesday") != 0:
-                days_of_players["Tuesday"].append(member)
-            if member.days.count("Wednesday") != 0:
-                days_of_players["Wednesday"].append(member)
-            if member.days.count("Thursday") != 0:
-                days_of_players["Thursday"].append(member)
-            if member.days.count("Friday") != 0:
-                days_of_players["Friday"].append(member)
-            if member.days.count("Saturday") != 0:
-                days_of_players["Saturday"].append(member)
-            if member.days.count("Sunday") != 0:
-                days_of_players["Sunday"].append(member)
+            member.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        if member.days.count("Monday") != 0:
+            days_of_players["Monday"].append(member)
+        if member.days.count("Tuesday") != 0:
+            days_of_players["Tuesday"].append(member)
+        if member.days.count("Wednesday") != 0:
+            days_of_players["Wednesday"].append(member)
+        if member.days.count("Thursday") != 0:
+            days_of_players["Thursday"].append(member)
+        if member.days.count("Friday") != 0:
+            days_of_players["Friday"].append(member)
+        if member.days.count("Saturday") != 0:
+            days_of_players["Saturday"].append(member)
+        if member.days.count("Sunday") != 0:
+            days_of_players["Sunday"].append(member)
 
         # print(days_of_players)
 
