@@ -28,7 +28,7 @@ for paragraphs in player_based_information:
     members.append(Player(paragraphs))
 
 
-def align_days():
+def align_days(member_list):
     days_of_players = {
         "Monday": [],
         "Tuesday": [],
@@ -38,7 +38,7 @@ def align_days():
         "Saturday": [],
         "Sunday": [],
     }
-    for member in members:
+    for member in member_list:
         if member.days == "All":
             for value in days_of_players.values():
                 value.append(member)
@@ -58,8 +58,9 @@ def align_days():
             if member.days.count("Sunday") != 0:
                 days_of_players["Sunday"].append(member)
 
-        #print(days_of_players)
+        # print(days_of_players)
 
     return days_of_players
 
-print(align_days())
+
+print(align_days(members))
