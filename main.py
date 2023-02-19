@@ -34,7 +34,6 @@ class Player:
         self.jobs = lines[4].split(", ")
         self.preferred_job = self.jobs[0]
         self.jobs = self.jobs[1:]
-        self.static_job = self.preferred_job
         if self.days == ['All']:
             self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         self.actual_job = None
@@ -49,7 +48,6 @@ class Player:
 members = []
 for paragraphs in player_based_information:
     members.append(Player(paragraphs))
-#print(members)
 
 days_of_players = {
     "Monday": [],
@@ -82,10 +80,10 @@ def align_days(member_list):
     return days_of_players
 
 clear_times = {
-    "Hard": [],
-    "Hardcore": [],
-    "Midcore": [],
     "Casual": [],
+    "Midcore": [],
+    "Hardcore": [],
+    "Hard": []
 }
 def align_clear_times(member_list):
     for member in member_list:
@@ -93,14 +91,14 @@ def align_clear_times(member_list):
             for value in clear_times.values():
                 value.append(member)
         else:
-            if member.content_length.count("Hard") != 0:
-                clear_times["Hard"].append(member)
-            if member.content_length.count("Hardcore") != 0:
-                clear_times["Hardcore"].append(member)
-            if member.content_length.count("Midcore") != 0:
-                clear_times["Midcore"].append(member)
             if member.content_length.count("Casual") != 0:
                 clear_times["Casual"].append(member)
+            if member.content_length.count("Midcore") != 0:
+                clear_times["Midcore"].append(member)
+            if member.content_length.count("Hardcore") != 0:
+                clear_times["Hardcore"].append(member)
+            if member.content_length.count("Hard") != 0:
+                clear_times["Hard"].append(member)
 
         # print(clear_times)
 
@@ -142,70 +140,120 @@ def align_times(member_list):
 
 def create_party(day, time, clear_time, member_list):
     members_that_fit = [member for member in member_list if (member.days.count(day) != 0 and member.times.count(time) != 0 and member.content_length.count(clear_time) != 0)]
+    members_that_fit.sort(key=lambda member: len(member.jobs))
+    #print(members_that_fit)
     party = [None] * 8
+    used_jobs = [None] * 8
     for member in members_that_fit:
         #print("Checking",member)
-        if job_roles[member.preferred_job] == "Tank" and party[0] == None:
+        if job_roles[member.preferred_job] == "Tank" and party[0] == None and member.preferred_job not in used_jobs:
             party[0], member.actual_job = member, member.preferred_job
-        elif job_roles[member.preferred_job] == "Tank" and party[1] == None:
+            used_jobs[0] = member.preferred_job
+        elif job_roles[member.preferred_job] == "Tank" and party[1] == None and member.preferred_job not in used_jobs:
             party[1], member.actual_job = member, member.preferred_job
+            used_jobs[1] = member.preferred_job
         elif job_roles[member.preferred_job] == "Regen Healer" and party[2] == None:
             party[2], member.actual_job = member, member.preferred_job
+            used_jobs[2] = member.preferred_job
         elif job_roles[member.preferred_job] == "Shield Healer" and party[3] == None:
             party[3], member.actual_job = member, member.preferred_job
-        elif job_roles[member.preferred_job] == "Melee" and party[4] == None:
+            used_jobs[3] = member.preferred_job
+        elif job_roles[member.preferred_job] == "Melee" and party[4] == None and member.preferred_job not in used_jobs:
             party[4], member.actual_job = member, member.preferred_job
-        elif job_roles[member.preferred_job] == "Melee" and party[5] == None:
+            used_jobs[4] = member.preferred_job
+        elif job_roles[member.preferred_job] == "Melee" and party[5] == None and member.preferred_job not in used_jobs:
             party[5], member.actual_job = member, member.preferred_job
+            used_jobs[5] = member.preferred_job
         elif job_roles[member.preferred_job] == "Ranged" and party[6] == None:
             party[6], member.actual_job = member, member.preferred_job
+            used_jobs[6] = member.preferred_job
         elif job_roles[member.preferred_job] == "Caster" and party[7] == None:
             party[7], member.actual_job = member, member.preferred_job
+            used_jobs[7] = member.preferred_job
         else:
+            #print("Checking ",member,"'s secondary jobs")
             i = 0
             while member not in party and i < len(member.jobs):
-                if job_roles[member.jobs[i]] == "Tank" and party[0] == None:
+                if job_roles[member.jobs[i]] == "Tank" and party[0] == None and member.jobs[i] not in used_jobs:
                     party[0], member.actual_job = member, member.jobs[i]
-                elif job_roles[member.jobs[i]] == "Tank" and party[1] == None:
+                    used_jobs[0] = (member.jobs[i])
+                elif job_roles[member.jobs[i]] == "Tank" and party[1] == None and member.jobs[i] not in used_jobs:
                     party[1], member.actual_job = member, member.jobs[i]
+                    used_jobs[1] = (member.jobs[i])
                 elif job_roles[member.jobs[i]] == "Regen Healer" and party[2] == None:
                     party[2], member.actual_job = member, member.jobs[i]
+                    used_jobs[2] = (member.jobs[i])
                 elif job_roles[member.jobs[i]] == "Shield Healer" and party[3] == None:
                     party[3], member.actual_job = member, member.jobs[i]
-                elif job_roles[member.jobs[i]] == "Melee" and party[4] == None:
+                    used_jobs[3] = (member.jobs[i])
+                elif job_roles[member.jobs[i]] == "Melee" and party[4] == None and member.jobs[i] not in used_jobs:
                     party[4], member.actual_job = member, member.jobs[i]
-                elif job_roles[member.jobs[i]] == "Melee" and party[5] == None:
+                    used_jobs[4] = (member.jobs[i])
+                elif job_roles[member.jobs[i]] == "Melee" and party[5] == None and member.jobs[i] not in used_jobs:
                     party[5], member.actual_job = member, member.jobs[i]
+                    used_jobs[5] = (member.jobs[i])
                 elif job_roles[member.jobs[i]] == "Ranged" and party[6] == None:
                     party[6], member.actual_job = member, member.jobs[i]
+                    used_jobs[6] = (member.jobs[i])
                 elif job_roles[member.jobs[i]] == "Caster" and party[7] == None:
+                    print("Resetting job for ",member.name)
                     party[7], member.actual_job = member, member.jobs[i]
+                    used_jobs[7] = (member.jobs[i])
                 i += 1
 
-    return party
+            #party_without_none = [member_in_party for member_in_party in party if member_in_party is not None]
+            #print(len(party_without_none),": ",party_without_none)
 
+    return [party, used_jobs]
+
+def reverse_party(member_list):
+    days = list(days_of_players.keys())
+    clears = list(clear_times.keys())
+    times = list(possible_times.keys())
+    #print(days,"\n",clears,"\n",times)
+    for member in member_list:
+        if member is not None:
+            for day in days:
+                if day not in member.days:
+                    days.pop(days.index(day))
+            for clear in clears:
+                if clear not in member.content_length:
+                    clears.pop(clears.index(clear))
+            for time in times:
+                if time not in member.times:
+                    times.pop(times.index(time))
+    return [clears[0], days, times]
 def big_align(made_parties, member_list):
     if len(member_list) != 0:
-        parties, longest_length, longest_party = [], 0, []
+        parties, long_roles, longest_length, longest_party, probably_roles = [], [], 0, [], []
         for time in clear_times:
             for day in days_of_players:
                 for day_time in possible_times:
-                    parties.append(create_party(day, day_time, time, member_list))
-        for party in parties:
-            test_party = [member for member in party if member is not None]
+                    created_party = create_party(day, day_time, time, member_list)
+                    parties.append(created_party[0])
+                    long_roles.append(created_party[1])
+        for i in range(len(parties)):
+            test_party = [member for member in parties[i] if member is not None]
             if len(test_party) > longest_length:
-                longest_party, longest_length = party, len(test_party)
-        for member in longest_party:
-            if member is not None:
-                member_list.remove(member)
+                longest_party, longest_length, probably_roles = parties[i], len(test_party), long_roles[i]
+        for i in range(len(longest_party)):
+            if longest_party[i] is not None:
+                member_list.remove(longest_party[i])
+                longest_party[i].actual_job = probably_roles[i]
         made_parties.append(longest_party)
         big_align(made_parties, member_list)
     return made_parties
 
 file.close()
+file = open("results.txt", "w").close()
 file = open("results.txt", "w")
 parties_created = big_align([], members)
 for i in range(len(parties_created)):
     party_str = [str(member) for member in parties_created[i]]
-    file.write("Party " + str(i + 1) + ":\n" + ("\n".join(party_str)))
+    #print([str(member.actual_job) for member in parties_created[i] if member is not None])
+    #print([str(member.preferred_job) for member in parties_created[i] if member is not None])
+    reverse_party_list = reverse_party(parties_created[i])
+    reverse_party_string = "\nLength: " + str(reverse_party_list[0]) + "\nDays: " + str(reverse_party_list[1]) + "\nTimes: " + str(reverse_party_list[2])
+    #print(party_str)
+    file.write("\n\nParty " + str(i + 1) + ":" + reverse_party_string + "\n" + ("\n".join(party_str)))
 file.close()
