@@ -15,6 +15,8 @@ class Player:
         self.preferred_job = self.jobs[0]
         self.jobs = self.jobs[1:]
         self.static_job = self.preferred_job
+        if self.days == ['All']:
+            self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
     def __repr__(self):
         return str(self.name)
@@ -59,9 +61,6 @@ def align_days(member_list):
         "Sunday": [],
     }
     for member in member_list:
-        if member.days == "All":
-            member.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-            print("Setting All to All",member.days)
         if member.days.count("Monday") != 0:
             days_of_players["Monday"].append(member)
         if member.days.count("Tuesday") != 0:
@@ -144,7 +143,7 @@ def create_party(day, time, clear_time, member_list):
     members_that_fit = [member for member in member_list if (member.days.count(day) != 0 and member.times.count(time) != 0 and member.content_length.count(clear_time) != 0)]
     party = [None] * 8
     for member in members_that_fit:
-        print("Checking",member)
+        #print("Checking",member)
         if job_roles[member.preferred_job] == "Tank" and party[0] == None:
             party[0] = member
         elif job_roles[member.preferred_job] == "Tank" and party[1] == None:
