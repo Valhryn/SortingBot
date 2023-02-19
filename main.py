@@ -160,6 +160,26 @@ def create_party(day, time, clear_time, member_list):
             party[6] = member
         elif job_roles[member.preferred_job] == "Caster" and party[7] == None:
             party[7] = member
+        else:
+            i = 0
+            while member not in party and i < len(member.jobs):
+                if job_roles[member.jobs[i]] == "Tank" and party[0] == None:
+                    party[0] = member
+                elif job_roles[member.jobs[i]] == "Tank" and party[1] == None:
+                    party[1] = member
+                elif job_roles[member.jobs[i]] == "Healer" and party[2] == None:
+                    party[2] = member
+                elif job_roles[member.jobs[i]] == "Healer" and party[3] == None:
+                    party[3] = member
+                elif job_roles[member.jobs[i]] == "Melee" and party[4] == None:
+                    party[4] = member
+                elif job_roles[member.jobs[i]] == "Melee" and party[5] == None:
+                    party[5] = member
+                elif job_roles[member.jobs[i]] == "Ranged" and party[6] == None:
+                    party[6] = member
+                elif job_roles[member.jobs[i]] == "Caster" and party[7] == None:
+                    party[7] = member
+                i += 1
 
     return party
 
