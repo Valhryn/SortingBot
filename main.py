@@ -50,16 +50,16 @@ for paragraphs in player_based_information:
     members.append(Player(paragraphs))
 print(members)
 
+days_of_players = {
+    "Monday": [],
+    "Tuesday": [],
+    "Wednesday": [],
+    "Thursday": [],
+    "Friday": [],
+    "Saturday": [],
+    "Sunday": [],
+}
 def align_days(member_list):
-    days_of_players = {
-        "Monday": [],
-        "Tuesday": [],
-        "Wednesday": [],
-        "Thursday": [],
-        "Friday": [],
-        "Saturday": [],
-        "Sunday": [],
-    }
     for member in member_list:
         if member.days.count("Monday") != 0:
             days_of_players["Monday"].append(member)
@@ -80,13 +80,13 @@ def align_days(member_list):
 
     return days_of_players
 
+clear_times = {
+    "Hard": [],
+    "Hardcore": [],
+    "Midcore": [],
+    "Casual": [],
+}
 def align_clear_times(member_list):
-    clear_times = {
-        "Hard": [],
-        "Hardcore": [],
-        "Midcore": [],
-        "Casual": [],
-    }
     for member in member_list:
         if member.days == "All":
             for value in clear_times.values():
@@ -105,16 +105,16 @@ def align_clear_times(member_list):
 
     return clear_times
 
+possible_times = {
+    "Dead of Night": [],
+    "Early Bird Morning": [],
+    "Morning": [],
+    "Afternoon": [],
+    "Early Evening": [],
+    "Evening": [],
+    "Night": [],
+}
 def align_times(member_list):
-    possible_times = {
-        "Dead of Night": [],
-        "Early Bird Morning": [],
-        "Morning": [],
-        "Afternoon": [],
-        "Early Evening": [],
-        "Evening": [],
-        "Night": [],
-    }
     for member in member_list:
         if member.times == "All":
             for value in possible_times.values():
@@ -183,6 +183,21 @@ def create_party(day, time, clear_time, member_list):
 
     return party
 
-#print(align_clear_times(members))
+def big_align(made_parties, member_list):
+    if len(member_list) != 0:
+        parties, longest_length, longest_party = [], 0, []
+        for time in clear_times:
+            for day in days_of_players:
+                for day_time in possible_times:
+                    parties.append(create_party(day, day_time, time, member_list))
+        for party in parties:
+            test_party = [member for member in party if member is not None]
+            if len(test_party) > longest_length:
+                longest_party, longest_length = party, len(test_party)
+        for member in longest_party:
+            member_list.remove(member)
+        made_parties.append(longest_party)
+        big_align(made_parties, member_list)
+    return made_parties
 
 print(create_party("Friday", "Afternoon", "Hard", members))
