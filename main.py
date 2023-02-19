@@ -142,7 +142,27 @@ def align_times(member_list):
 
 def create_party(day, time, clear_time, member_list):
     members_that_fit = [member for member in member_list if (member.days.count(day) != 0 and member.times.count(time) != 0 and member.content_length.count(clear_time) != 0)]
-    return members_that_fit
+    party = [None] * 8
+    for member in members_that_fit:
+        print("Checking",member)
+        if job_roles[member.preferred_job] == "Tank" and party[0] == None:
+            party[0] = member
+        elif job_roles[member.preferred_job] == "Tank" and party[1] == None:
+            party[1] = member
+        elif job_roles[member.preferred_job] == "Healer" and party[2] == None:
+            party[2] = member
+        elif job_roles[member.preferred_job] == "Healer" and party[3] == None:
+            party[3] = member
+        elif job_roles[member.preferred_job] == "Melee" and party[4] == None:
+            party[4] = member
+        elif job_roles[member.preferred_job] == "Melee" and party[5] == None:
+            party[5] = member
+        elif job_roles[member.preferred_job] == "Ranged" and party[6] == None:
+            party[6] = member
+        elif job_roles[member.preferred_job] == "Caster" and party[7] == None:
+            party[7] = member
+
+    return party
 
 #print(align_clear_times(members))
 
