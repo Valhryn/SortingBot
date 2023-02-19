@@ -22,11 +22,31 @@ class Player:
     def player_tester(self):
         return str(self.name) + " on days " + str(self.days)
 
-
+job_roles = {
+    "WHM": "Healer",
+    "SCH": "Healer",
+    "AST": "Healer",
+    "SGE": "Healer",
+    "PLD": "Tank",
+    "WAR": "Tank",
+    "DRK": "Tank",
+    "GNB": "Tank",
+    "MNK": "Melee",
+    "DRG": "Melee",
+    "NIN": "Melee",
+    "SAM": "Melee",
+    "RPR": "Melee",
+    "BRD": "Ranged",
+    "MCH": "Ranged",
+    "DNC": "Ranged",
+    "BLM": "Caster",
+    "SMN": "Caster",
+    "RDM": "Caster"
+}
 members = []
 for paragraphs in player_based_information:
     members.append(Player(paragraphs))
-
+print(members)
 
 def align_days(member_list):
     days_of_players = {
@@ -41,6 +61,7 @@ def align_days(member_list):
     for member in member_list:
         if member.days == "All":
             member.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+            print("Setting All to All",member.days)
         if member.days.count("Monday") != 0:
             days_of_players["Monday"].append(member)
         if member.days.count("Tuesday") != 0:
