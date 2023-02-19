@@ -2,10 +2,10 @@ file = open('dark.txt', 'r')
 player_based_information = file.read().split("\n\n")
 
 job_roles = {
-    "WHM": "Healer",
-    "SCH": "Healer",
-    "AST": "Healer",
-    "SGE": "Healer",
+    "WHM": "Regen Healer",
+    "SCH": "Shield Healer",
+    "AST": "Regen Healer",
+    "SGE": "Shield Healer",
     "PLD": "Tank",
     "WAR": "Tank",
     "DRK": "Tank",
@@ -149,9 +149,9 @@ def create_party(day, time, clear_time, member_list):
             party[0], member.actual_job = member, member.preferred_job
         elif job_roles[member.preferred_job] == "Tank" and party[1] == None:
             party[1], member.actual_job = member, member.preferred_job
-        elif job_roles[member.preferred_job] == "Healer" and party[2] == None:
+        elif job_roles[member.preferred_job] == "Regen Healer" and party[2] == None:
             party[2], member.actual_job = member, member.preferred_job
-        elif job_roles[member.preferred_job] == "Healer" and party[3] == None:
+        elif job_roles[member.preferred_job] == "Shield Healer" and party[3] == None:
             party[3], member.actual_job = member, member.preferred_job
         elif job_roles[member.preferred_job] == "Melee" and party[4] == None:
             party[4], member.actual_job = member, member.preferred_job
@@ -168,9 +168,9 @@ def create_party(day, time, clear_time, member_list):
                     party[0], member.actual_job = member, member.jobs[i]
                 elif job_roles[member.jobs[i]] == "Tank" and party[1] == None:
                     party[1], member.actual_job = member, member.jobs[i]
-                elif job_roles[member.jobs[i]] == "Healer" and party[2] == None:
+                elif job_roles[member.jobs[i]] == "Regen Healer" and party[2] == None:
                     party[2], member.actual_job = member, member.jobs[i]
-                elif job_roles[member.jobs[i]] == "Healer" and party[3] == None:
+                elif job_roles[member.jobs[i]] == "Shield Healer" and party[3] == None:
                     party[3], member.actual_job = member, member.jobs[i]
                 elif job_roles[member.jobs[i]] == "Melee" and party[4] == None:
                     party[4], member.actual_job = member, member.jobs[i]
