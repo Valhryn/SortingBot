@@ -13,12 +13,12 @@ job_roles = {
     "MNK": "Melee",
     "DRG": "Melee",
     "NIN": "Melee",
-    "SAM": "Melee",
+    "SAM": "Selfish",
     "RPR": "Melee",
     "BRD": "Ranged",
-    "MCH": "Ranged",
+    "MCH": "Selfish",
     "DNC": "Ranged",
-    "BLM": "Caster",
+    "BLM": "Selfish",
     "SMN": "Caster",
     "RDM": "Caster"
 }
@@ -32,8 +32,6 @@ class Player:
         self.days = lines[2].split(", ")
         self.times = lines[3].split(", ")
         self.jobs = lines[4].split(", ")
-        self.preferred_job = self.jobs[0]
-        self.jobs = self.jobs[1:]
         if self.days == ['All']:
             self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         self.actual_job = None
@@ -145,65 +143,48 @@ def create_party(day, time, clear_time, member_list):
     party = [None] * 8
     used_jobs = [None] * 8
     for member in members_that_fit:
-        #print("Checking",member)
-        if job_roles[member.preferred_job] == "Tank" and party[0] == None and member.preferred_job not in used_jobs:
-            party[0], member.actual_job = member, member.preferred_job
-            used_jobs[0] = member.preferred_job
-        elif job_roles[member.preferred_job] == "Tank" and party[1] == None and member.preferred_job not in used_jobs:
-            party[1], member.actual_job = member, member.preferred_job
-            used_jobs[1] = member.preferred_job
-        elif job_roles[member.preferred_job] == "Regen Healer" and party[2] == None:
-            party[2], member.actual_job = member, member.preferred_job
-            used_jobs[2] = member.preferred_job
-        elif job_roles[member.preferred_job] == "Shield Healer" and party[3] == None:
-            party[3], member.actual_job = member, member.preferred_job
-            used_jobs[3] = member.preferred_job
-        elif job_roles[member.preferred_job] == "Melee" and party[4] == None and member.preferred_job not in used_jobs:
-            party[4], member.actual_job = member, member.preferred_job
-            used_jobs[4] = member.preferred_job
-        elif job_roles[member.preferred_job] == "Melee" and party[5] == None and member.preferred_job not in used_jobs:
-            party[5], member.actual_job = member, member.preferred_job
-            used_jobs[5] = member.preferred_job
-        elif job_roles[member.preferred_job] == "Ranged" and party[6] == None:
-            party[6], member.actual_job = member, member.preferred_job
-            used_jobs[6] = member.preferred_job
-        elif job_roles[member.preferred_job] == "Caster" and party[7] == None:
-            party[7], member.actual_job = member, member.preferred_job
-            used_jobs[7] = member.preferred_job
-        else:
-            #print("Checking ",member,"'s secondary jobs")
-            i = 0
-            while member not in party and i < len(member.jobs):
-                if job_roles[member.jobs[i]] == "Tank" and party[0] == None and member.jobs[i] not in used_jobs:
-                    party[0], member.actual_job = member, member.jobs[i]
-                    used_jobs[0] = (member.jobs[i])
-                elif job_roles[member.jobs[i]] == "Tank" and party[1] == None and member.jobs[i] not in used_jobs:
-                    party[1], member.actual_job = member, member.jobs[i]
-                    used_jobs[1] = (member.jobs[i])
-                elif job_roles[member.jobs[i]] == "Regen Healer" and party[2] == None:
-                    party[2], member.actual_job = member, member.jobs[i]
-                    used_jobs[2] = (member.jobs[i])
-                elif job_roles[member.jobs[i]] == "Shield Healer" and party[3] == None:
-                    party[3], member.actual_job = member, member.jobs[i]
-                    used_jobs[3] = (member.jobs[i])
-                elif job_roles[member.jobs[i]] == "Melee" and party[4] == None and member.jobs[i] not in used_jobs:
-                    party[4], member.actual_job = member, member.jobs[i]
-                    used_jobs[4] = (member.jobs[i])
-                elif job_roles[member.jobs[i]] == "Melee" and party[5] == None and member.jobs[i] not in used_jobs:
-                    party[5], member.actual_job = member, member.jobs[i]
-                    used_jobs[5] = (member.jobs[i])
-                elif job_roles[member.jobs[i]] == "Ranged" and party[6] == None:
-                    party[6], member.actual_job = member, member.jobs[i]
-                    used_jobs[6] = (member.jobs[i])
-                elif job_roles[member.jobs[i]] == "Caster" and party[7] == None:
-                    print("Resetting job for ",member.name)
-                    party[7], member.actual_job = member, member.jobs[i]
-                    used_jobs[7] = (member.jobs[i])
-                i += 1
+        i = 0
+        while member not in party and i < len(member.jobs):
+            if job_roles[member.jobs[i]] == "Tank" and party[0] == None and member.jobs[i] not in used_jobs:
+                party[0] = member
+                used_jobs[0] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Tank" and party[1] == None and member.jobs[i] not in used_jobs:
+                party[1] = member
+                used_jobs[1] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Regen Healer" and party[2] == None:
+                party[2] = member
+                used_jobs[2] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Shield Healer" and party[3] == None:
+                party[3] = member
+                used_jobs[3] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Melee" and party[4] == None and member.jobs[i] not in used_jobs:
+                party[4] = member
+                used_jobs[4] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Selfish" and party[5] == None:
+                party[5] = member
+                used_jobs[5] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Ranged" and party[6] == None:
+                party[6] = member
+                used_jobs[6] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Caster" and party[7] == None:
+                print("Resetting job for ",member.name)
+                party[7] = member
+                used_jobs[7] = (member.jobs[i])
+            i += 1
 
             #party_without_none = [member_in_party for member_in_party in party if member_in_party is not None]
             #print(len(party_without_none),": ",party_without_none)
 
+    remaining_members = [member for member in members_that_fit if member not in party]
+    if party[5] is None and len(remaining_members) > 0:
+        for member_remain in remaining_members:
+            for i in range(len(member_remain.jobs)):
+                if job_roles[member_remain.jobs[i]] == "Melee" or job_roles[member_remain.jobs[i]] == "Ranged" or job_roles[member_remain.jobs[i]] == "Caster":
+                    party[5] = member
+                    used_jobs[5] = (member.jobs[i])
+                    break
+            if party[5] is not None:
+                break
     return [party, used_jobs]
 
 def reverse_party(member_list):
