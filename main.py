@@ -167,13 +167,9 @@ def create_party(day, time, clear_time, member_list):
                 party[6] = member
                 used_jobs[6] = (member.jobs[i])
             elif job_roles[member.jobs[i]] == "Caster" and party[7] == None:
-                print("Resetting job for ",member.name)
                 party[7] = member
                 used_jobs[7] = (member.jobs[i])
             i += 1
-
-            #party_without_none = [member_in_party for member_in_party in party if member_in_party is not None]
-            #print(len(party_without_none),": ",party_without_none)
 
     remaining_members = [member for member in members_that_fit if member not in party]
     if party[5] is None and len(remaining_members) > 0:
