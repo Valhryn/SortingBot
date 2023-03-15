@@ -1,6 +1,10 @@
+import itertools
+
 file = open('dark.txt', 'r')
 player_based_information = file.read().split("\n\n")
 
+
+# Issues: Violent not in Casual Party with open slot, Xander not in Midcore party with open slot (based off length)? Eyre treated as selfish, Aminara for midcore as well
 job_roles = {
     "WHM": "Regen Healer",
     "SCH": "Shield Healer",
@@ -28,16 +32,16 @@ class Player:
         lines = [info.split(": ")[1] for info in lines]
 
         self.name = lines[0]
-        self.content_length = lines[1].split(", ")
+        self.content_length = lines[1].split(", ")[0]
         self.days = lines[2].split(", ")
         self.times = lines[3].split(", ")
         self.jobs = lines[4].split(", ")
         if self.days == ['All']:
             self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        self.actual_job = None
+        self.job = None
 
     def __repr__(self):
-        return str(self.name) + " (" + str(self.actual_job) + ")"
+        return str(self.name) + " (" + str(self.job) + ")"
 
     def player_tester(self):
         return str(self.name) + " on days " + str(self.days)
@@ -181,8 +185,55 @@ def create_party(day, time, clear_time, member_list):
                     break
             if party[5] is not None:
                 break
+    if party != [None] * 8:
+        print("Party: ", party)
     return [party, used_jobs]
 
+def create_static(party):
+    used_jobs = [None] * 8
+    found_ppl = [None] * 8
+    for member in party:
+        i = 0
+        if member is None:
+            continue
+        while member not in found_ppl and i < len(member.jobs):
+            if job_roles[member.jobs[i]] == "Tank" and party[0] == None and member.jobs[i] not in used_jobs:
+                found_ppl[0] = member
+                used_jobs[0] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Tank" and party[1] == None and member.jobs[i] not in used_jobs:
+                found_ppl[1] = member
+                used_jobs[1] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Regen Healer" and party[2] == None:
+                found_ppl[2] = member
+                used_jobs[2] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Shield Healer" and party[3] == None:
+                found_ppl[3] = member
+                used_jobs[3] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Melee" and party[4] == None and member.jobs[i] not in used_jobs:
+                found_ppl[4] = member
+                used_jobs[4] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Selfish" and party[5] == None:
+                found_ppl[5] = member
+                used_jobs[5] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Ranged" and party[6] == None:
+                found_ppl[6] = member
+                used_jobs[6] = (member.jobs[i])
+            elif job_roles[member.jobs[i]] == "Caster" and party[7] == None:
+                found_ppl[7] = member
+                used_jobs[7] = (member.jobs[i])
+            i += 1
+
+    remaining_members = [member for member in party if (member is not None and member not in found_ppl)]
+    if found_ppl[5] is None and len(remaining_members) > 0:
+        for member_remain in remaining_members:
+            for i in range(len(member_remain.jobs)):
+                if job_roles[member_remain.jobs[i]] == "Melee" or job_roles[member_remain.jobs[i]] == "Ranged" or job_roles[member_remain.jobs[i]] == "Caster":
+                    found_ppl[5] = member_remain
+                    used_jobs[5] = (member_remain.jobs[i])
+                    break
+            if party[5] is not None:
+                break
+    return used_jobs
 def reverse_party(member_list):
     days = list(days_of_players.keys())
     clears = list(clear_times.keys())
@@ -192,13 +243,13 @@ def reverse_party(member_list):
         if member is not None:
             for day in days:
                 if day not in member.days:
-                    days.pop(days.index(day))
+                    days.remove(day)
             for clear in clears:
                 if clear not in member.content_length:
-                    clears.pop(clears.index(clear))
+                    clears.remove(clear)
             for time in times:
                 if time not in member.times:
-                    times.pop(times.index(time))
+                    times.remove(time)
     return [clears[0], days, times]
 def big_align(made_parties, member_list):
     if len(member_list) != 0:
@@ -206,19 +257,22 @@ def big_align(made_parties, member_list):
         for time in clear_times:
             for day in days_of_players:
                 for day_time in possible_times:
-                    created_party = create_party(day, day_time, time, member_list)
-                    parties.append(created_party[0])
-                    long_roles.append(created_party[1])
-        for i in range(len(parties)):
-            test_party = [member for member in parties[i] if member is not None]
-            if len(test_party) > longest_length:
-                longest_party, longest_length, probably_roles = parties[i], len(test_party), long_roles[i]
-        for i in range(len(longest_party)):
+                    parties.append(tuple(create_party(day, day_time, time, member_list)[0]))
+        parties = list(set(parties))
+        longest_party = max(parties, key = len)
+        party_roles = create_static(longest_party)
+        longest_length = len(longest_party)
+        for i in range(longest_length):
             if longest_party[i] is not None:
+                longest_party[i].job = party_roles[i]
                 member_list.remove(longest_party[i])
-                longest_party[i].actual_job = probably_roles[i]
-        made_parties.append(longest_party)
-        big_align(made_parties, member_list)
+        print("Current party: ",longest_party)
+        print("Remaining members",member_list)
+        made_parties.append(list(longest_party))
+        if len(member_list) >1:
+            big_align(made_parties, member_list)
+        else:
+            made_parties.append(member_list)
     return made_parties
 
 file.close()
