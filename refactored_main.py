@@ -45,7 +45,12 @@ possible_times = {
     "Night": [],
 }
 
-
+clear_times = {
+    "Casual": [],
+    "Midcore": [],
+    "Hardcore": [],
+    "Hard": []
+}
 class Player:
     def __init__(self, informational_paragraph):
         lines = informational_paragraph.split("\n")
@@ -77,44 +82,83 @@ def create_party(day, time, difficulty):
 
     most_jobs = len(max(member_list, key = lambda mem: len(mem.jobs)).jobs)
     party = [[None] * 8] * 2
+    length = 0
     #print(party)
 
     for i in range(most_jobs):
         for member in member_list:
+            #print(member)
             if len(member.jobs) <= i:
                 member_list.remove(member)
                 break
             elif job_roles[member.jobs[i]] == "Tank" and party[0][0] == None and member.jobs[i] not in party:
                 party[0][0] = member
-                party[1][0] = (member.jobs[i])
+                party[1][0] = member.jobs[i]
+                length += 1
+                print(party[0][0])
             elif job_roles[member.jobs[i]] == "Tank" and party[0][1] == None and member.jobs[i] not in party:
                 party[0][1] = member
-                party[1][1] = (member.jobs[i])
+                party[1][1] = member.jobs[i]
+                length += 1
             elif job_roles[member.jobs[i]] == "Regen Healer" and party[0][2] == None:
                 party[0][2] = member
-                party[1][2] = (member.jobs[i])
+                party[1][2] = member.jobs[i]
+                length += 1
             elif job_roles[member.jobs[i]] == "Shield Healer" and party[0][3] == None:
                 party[0][3] = member
-                party[1][3] = (member.jobs[i])
+                party[1][3] = member.jobs[i]
+                length += 1
             elif job_roles[member.jobs[i]] == "Melee" and party[0][4] == None and member.jobs[i] not in party:
                 party[0][4] = member
-                party[1][4] = (member.jobs[i])
+                party[1][4] = member.jobs[i]
+                length += 1
             elif job_roles[member.jobs[i]] == "Selfish" and party[0][5] == None:
                 party[0][5] = member
-                party[1][5] = (member.jobs[i])
+                party[1][5] = member.jobs[i]
+                length += 1
             elif job_roles[member.jobs[i]] == "Ranged" and party[0][6] == None:
                 party[0][6] = member
-                party[1][6] = (member.jobs[i])
+                party[1][6] = member.jobs[i]
+                length += 1
             elif job_roles[member.jobs[i]] == "Caster" and party[0][7] == None:
                 party[0][7] = member
-                party[1][7] = (member.jobs[i])
+                party[1][7] = member.jobs[i]
+                length += 1
+    print(party[0])
+    return [party, length]
+
+def align():
+    best_party, best_length = [0], 0
+    for day in days_of_players:
+        for time in possible_times:
+            for difficulty in clear_times:
+                new_party = create_party(day, time, difficulty)
+                new_length = new_party[1]
+                new_party = new_party[0]
+                if new_length > best_length:
+                    best_party = new_party
+                    best_length = new_length
+
+    set_party = best_party[0]
+    for i in range(8):
+        if set_party[i] is not None:
+            print(set_party[i])
+            print(isinstance(set_party[i], Player))
+            set_party[i].job = best_party[1][i]
+            members.remove(set_party[i])
+
+    return set_party
+
+party_list = []
+while len(members) > 0:
+    party_list.append(align())
 
 
 create_party("Monday", "Evening", "Hard")
 file.close()
 file = open("results.txt", "w").close()
 file = open("results.txt", "w")
-file.write("\n".join(map(str, members)))
+file.write("\n".join(map(str, party_list)))
 # parties_created = big_align([], members)
 # for i in range(len(parties_created)):
 #     party_str = [str(member) for member in parties_created[i]]
