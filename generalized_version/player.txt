@@ -13,7 +13,7 @@ Roles: Tank
 Name: Player Three
 Days: Thursday, Friday
 Starting Time: 12
-Ending Time: 18
+Ending Time: 15
 Roles: Support
 
 Name: Player Four
@@ -38,4 +38,10 @@ Name: Player Seven
 Days: All
 Starting Time: 16
 Ending Time: 3
+Roles: Tank
+
+Name: Player Eight
+Days: All
+Starting Time: 16
+Ending Time: 19
 Roles: Tank

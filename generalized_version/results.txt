@@ -1,13 +1,20 @@
-Days: {'Sunday', 'Thursday'}
-Times: {'Sunday', 'Thursday'}
+Days: Sunday, Thursday
+Times: 18 -> 19
 	Player Two (Tank)
-	Player Three (Support)
+	Player Six (Support)
 	Player One (DPS)
 	Player Four (DPS)
 
-Days: {'Sunday', 'Saturday'}
-Times: {'Sunday', 'Saturday'}
+Days: Sunday, Saturday
+Times: 17 -> 24
 	Player Seven (Tank)
-	Player Six (Support)
 	Player Five (DPS)
+
+Days: Tuesday, Sunday, Thursday, Saturday, Monday, Friday, Wednesday
+Times: 16 -> 19
+	Player Eight (Tank)
+
+Days: Thursday, Friday
+Times: 12 -> 15
+	Player Three (Support)
 
