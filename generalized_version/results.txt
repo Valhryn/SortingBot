@@ -1,0 +1,13 @@
+Days: {'Sunday', 'Thursday'}
+Times: {'Sunday', 'Thursday'}
+	Player Two (Tank)
+	Player Three (Support)
+	Player One (DPS)
+	Player Four (DPS)
+
+Days: {'Sunday', 'Saturday'}
+Times: {'Sunday', 'Saturday'}
+	Player Seven (Tank)
+	Player Six (Support)
+	Player Five (DPS)
+

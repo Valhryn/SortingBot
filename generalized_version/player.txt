@@ -1,0 +1,41 @@
+Name: Player One
+Days: Monday, Tuesday, Thursday
+Starting Time: 14
+Ending Time: 22
+Roles: DPS
+
+Name: Player Two
+Days: Tuesday, Wednesday, Thursday
+Starting Time: 16
+Ending Time: 20
+Roles: Tank
+
+Name: Player Three
+Days: Thursday, Friday
+Starting Time: 12
+Ending Time: 18
+Roles: Support
+
+Name: Player Four
+Days: Thursday, Sunday
+Starting Time: 13
+Ending Time: 19
+Roles: DPS
+
+Name: Player Five
+Days: Saturday, Sunday
+Starting Time: 17
+Ending Time: 24
+Roles: DPS
+
+Name: Player Six
+Days: Thursday, Sunday
+Starting Time: 18
+Ending Time: 2
+Roles: Support
+
+Name: Player Seven
+Days: All
+Starting Time: 16
+Ending Time: 3
+Roles: Tank
