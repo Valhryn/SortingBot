@@ -1,5 +1,6 @@
-file = open('player.txt', 'r')
-player_based_information = file.read().split("\n\n")
+def start():
+    file = open('player.txt', 'r')
+    return file.read().split("\n\n")
 
 days_of_players = {
     "Monday": [],
@@ -40,12 +41,13 @@ class Player:
             max_time += 24
         return max_time
 
+def set_members():
+    members = []
+    for paragraphs in start():
+        members.append(Player(paragraphs))
+    return members
 
-members = []
-for paragraphs in player_based_information:
-    members.append(Player(paragraphs))
-
-def create_party(day, time):
+def create_party(day, time, members):
     member_list = [member for member in members if (day in member.days and member.between(time))]
     member_list = sorted(member_list, key = lambda mem: len(mem.roles))
     #print(member_list)
@@ -76,7 +78,7 @@ def create_party(day, time):
     #print(party)
     return [party, len([x for x in party if x is not None])]
 
-def align():
+def align(members):
     best_party, best_length = [0], 0
     for day in days_of_players:
         for time in range(24):
@@ -101,10 +103,10 @@ def align():
         members.remove(set_party[i])
 
     return set_party
-
-party_list = []
-while len(members) > 0:
-    party_list.append(align())
+def create_parties(members):
+    party_list = []
+    while len(members) > 0:
+        party_list.append(align(members))
 
 def reverse_party(party):
     days = [set(person.days) for person in party]
@@ -127,21 +129,21 @@ def reverse_party(party):
 
     return [day_set, time_set]
 
-file.close()
-file = open("results.txt", "w").close()
-file = open("results.txt", "w")
+def end_file(party_list):
+    file = open("results.txt", "w").close()
+    file = open("results.txt", "w")
 
-for party in party_list:
-    party_details = reverse_party(party)
+    for party in party_list:
+        party_details = reverse_party(party)
 
-    days = list(party_details[0])
-    file.write("Days: " + str(days).replace("'", "")[1:-1])
-    if party_details[1][1] > 24:
-        party_details[1][1] += -24
-    file.write("\nTimes: " + str(party_details[1][0]) + " -> " + str(party_details[1][1]))
-    file.write("\n\t")
+        days = list(party_details[0])
+        file.write("Days: " + str(days).replace("'", "")[1:-1])
+        if party_details[1][1] > 24:
+            party_details[1][1] += -24
+        file.write("\nTimes: " + str(party_details[1][0]) + " -> " + str(party_details[1][1]))
+        file.write("\n\t")
 
-    file.write("\n\t".join(map(str, party)))
+        file.write("\n\t".join(map(str, party)))
 
-    file.write("\n\n")
-file.close()
+        file.write("\n\n")
+    file.close()
