@@ -32,7 +32,13 @@ class Player:
         return str(self.name) + " on days " + str(self.days)
 
     def between(self, value):
-        return self.times[0] <= value <= self.times[1]
+        return self.times[0] <= value <= self.max_time()
+
+    def max_time(self):
+        max_time = self.times[1]
+        if self.times[1] < self.times[0]:
+            max_time += 24
+        return max_time
 
 
 members = []
@@ -42,7 +48,7 @@ for paragraphs in player_based_information:
 def create_party(day, time):
     member_list = [member for member in members if (day in member.days and member.between(time))]
     member_list = sorted(member_list, key = lambda mem: len(mem.roles))
-    print(member_list)
+    #print(member_list)
     #print(member_list)
 
     if len(member_list) == 0:
@@ -109,13 +115,15 @@ def reverse_party(party):
             set_of_days = set_of_days.intersection(day_set)
         day_set = day
 
-    times = [set(person.times) for person in party]
-    set_of_times = set(possible_times.keys())
-    time_set = None
-    for day in days:
-        if time_set is not None:
-            set_of_times = set_of_times.intersection(time_set)
-        time_set = day
+    min_hour = -1
+    max_hour = 1000
+    for person in party:
+        player_max = person.max_time()
+        if person.times[0] > min_hour:
+            min_hour = person.times[0]
+        if player_max < max_hour:
+            max_hour = person.max_time()
+    time_set = [min_hour, max_hour]
 
     return [day_set, time_set]
 
@@ -126,8 +134,11 @@ file = open("results.txt", "w")
 for party in party_list:
     party_details = reverse_party(party)
 
-    file.write("Days: " + str(party_details[0]))
-    file.write("\nTimes: " + str(party_details[1]))
+    days = list(party_details[0])
+    file.write("Days: " + str(days).replace("'", "")[1:-1])
+    if party_details[1][1] > 24:
+        party_details[1][1] += -24
+    file.write("\nTimes: " + str(party_details[1][0]) + " -> " + str(party_details[1][1]))
     file.write("\n\t")
 
     file.write("\n\t".join(map(str, party)))
