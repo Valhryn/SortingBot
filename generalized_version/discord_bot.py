@@ -1,21 +1,22 @@
+import os
 import discord
-
 import dotenv
-
 import generalized_version.main
 
 dotenv.load_dotenv()
 token = str(os.getenv("TOKEN"))
 
-bot = discord.Bot
+bot = discord.Bot()
+
 
 @bot.event
 async def on_ready():
     print(f"Bot has logged in!")
 
+
 @bot.slash_command(guild_ids="1081362341767168112")
 async def create_player(ctx, name, days, min_hour: discord.option(int), max_hour: discord.option(int), role):
-    file = open("player.txt", "w")
+    file = open("test_player.txt", "w")
     data = "Name: " + name
     data += "\nGuild: " + ctx.guild
     data += "\nDays: " + str(days)
@@ -23,6 +24,7 @@ async def create_player(ctx, name, days, min_hour: discord.option(int), max_hour
     data += "\nRoles: " + role
     file.write(data)
     await ctx.send(name + " is made!")
+
 
 @bot.slash_command(guild_ids="1081362341767168112")
 async def form_parties(ctx):
@@ -34,6 +36,4 @@ async def form_parties(ctx):
     await ctx.send(file)
 
 
-
-
-bot.run(token)
+bot.run(os.getenv("TOKEN"))
