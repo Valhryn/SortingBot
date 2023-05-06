@@ -18,10 +18,10 @@ class Player:
         lines = [info.split(": ")[1] for info in lines]
 
         self.name = lines[0]
-        self.days = lines[1].split(", ")
-        self.times = [int(lines[2].split(", ")[0]), int(lines[3].split(", ")[0])]
-        print(self.times)
-        self.roles = lines[4].split(", ")
+        self.guild = lines[1]
+        self.days = lines[2].split(", ")
+        self.times = [int(value) for value in lines[4].split(", ")]
+        self.roles = lines[5].split(", ")
         if self.days == ['All']:
             self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         self.role = None
@@ -41,11 +41,11 @@ class Player:
             max_time += 24
         return max_time
 
-def set_members():
+def set_members(guild_id):
     members = []
     for paragraphs in start():
         members.append(Player(paragraphs))
-    return members
+    return [member for member in members if member.guild == guild_id]
 
 def create_party(day, time, members):
     member_list = [member for member in members if (day in member.days and member.between(time))]
@@ -146,4 +146,4 @@ def end_file(party_list):
         file.write("\n\t".join(map(str, party)))
 
         file.write("\n\n")
-    file.close()
+    return file
