@@ -17,7 +17,7 @@ async def on_ready():
 @bot.slash_command(guild_ids=[os.getenv("GUILD_ID")])
 @guild_only()
 async def create_player(ctx, name, days, min_hour: discord.Option(int), max_hour: discord.Option(int), role):
-    file = open("test_player.txt", "w")
+    file = open("test_player.txt", "a")
     data = "Name: " + name
     data += "\nGuild: " + str(ctx.guild.id)
     data += "\nDays: " + str(days)
