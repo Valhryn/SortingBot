@@ -1,3 +1,6 @@
 ffxiv_version/dark.txt
 
 .env
+
+__pycache__
+.idea

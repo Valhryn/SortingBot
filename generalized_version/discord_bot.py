@@ -14,8 +14,7 @@ bot = discord.Bot()
 async def on_ready():
     print(f"Bot has logged in!")
 
-
-@bot.slash_command(guild_ids=[1081362341767168112])
+@bot.slash_command(guild_ids=[os.getenv("GUILD_ID")])
 @guild_only()
 async def create_player(ctx, name, days, min_hour: discord.Option(int), max_hour: discord.Option(int), role):
     file = open("test_player.txt", "w")
@@ -28,7 +27,7 @@ async def create_player(ctx, name, days, min_hour: discord.Option(int), max_hour
     await ctx.respond(name + " is made!")
 
 
-@bot.slash_command(guild_ids=[1081362341767168112])
+@bot.slash_command(guild_ids=[os.getenv("GUILD_ID")])
 @guild_only()
 async def form_parties(ctx):
     file = open("players.txt", "w")
