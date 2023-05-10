@@ -1,5 +1,4 @@
-def start():
-    file = open('player.txt', 'r')
+def start(file):
     return file.read().split("\n\n")
 
 days_of_players = {
@@ -41,9 +40,9 @@ class Player:
             max_time += 24
         return max_time
 
-def set_members(guild_id):
+def set_members(file, guild_id):
     members = []
-    for paragraphs in start():
+    for paragraphs in start(file):
         members.append(Player(paragraphs))
     return [member for member in members if member.guild == guild_id]
 

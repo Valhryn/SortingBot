@@ -1,47 +1,5 @@
 Name: Player One
-Guild: 111111111111111
-Days: Monday, Tuesday, Thursday
-Time: 14, 22
+Guild: 1081362341767168112
+Days: Monday
+Times: 3, 8
 Roles: DPS
-
-Name: Player Two
-Guild: 111111111111111
-Days: Tuesday, Wednesday, Thursday
-Time: 16, 20
-Roles: Tank
-
-Name: Player Three
-Guild: 111111111111111
-Days: Thursday, Friday
-Time: 12, 15
-Roles: Support
-
-Name: Player Four
-Guild: 111111111111111
-Days: Thursday, Sunday
-Time: 13, 19
-Roles: DPS
-
-Name: Player Five
-Guild: 111111111111111
-Days: Saturday, Sunday
-Time: 17, 24
-Roles: DPS
-
-Name: Player Six
-Guild: 111111111111111
-Days: Thursday, Sunday
-Time: 18, 2
-Roles: Support
-
-Name: Player Seven
-Guild: 111111111111111
-Days: All
-Time: 16, 3
-Roles: Tank
-
-Name: Player Eight
-Guild: 111111111111111
-Days: All
-Time: 16, 19
-Roles: Tank
