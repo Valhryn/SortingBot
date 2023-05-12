@@ -1,5 +1,6 @@
 def start(file):
-    return file.read().split("\n\n")
+    return file.read().split("\n\n")[:-1]
+
 
 days_of_players = {
     "Monday": [],
@@ -11,6 +12,7 @@ days_of_players = {
     "Sunday": [],
 }
 
+
 class Player:
     def __init__(self, informational_paragraph):
         lines = informational_paragraph.split("\n")
@@ -19,8 +21,8 @@ class Player:
         self.name = lines[0]
         self.guild = lines[1]
         self.days = lines[2].split(", ")
-        self.times = [int(value) for value in lines[4].split(", ")]
-        self.roles = lines[5].split(", ")
+        self.times = [int(value) for value in lines[3].split(", ")]
+        self.roles = lines[4].split(", ")
         if self.days == ['All']:
             self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         self.role = None
@@ -40,29 +42,30 @@ class Player:
             max_time += 24
         return max_time
 
+
 def set_members(file, guild_id):
     members = []
-    for paragraphs in start(file):
+    paragraph_array = start(file)
+    for paragraphs in paragraph_array:
+        print("appending...")
         members.append(Player(paragraphs))
-    return [member for member in members if member.guild == guild_id]
+    print([member for member in members if int(member.guild) == guild_id])
+    return [member for member in members if int(member.guild) == guild_id]
+
 
 def create_party(day, time, members):
     member_list = [member for member in members if (day in member.days and member.between(time))]
-    member_list = sorted(member_list, key = lambda mem: len(mem.roles))
-    #print(member_list)
-    #print(member_list)
+    member_list = sorted(member_list, key=lambda mem: len(mem.roles))
 
     if len(member_list) == 0:
         return []
 
-    most_roles = len(max(member_list, key = lambda mem: len(mem.roles)).roles)
+    most_roles = len(max(member_list, key=lambda mem: len(mem.roles)).roles)
     party = [None] * 4
     length = 0
-    #print(party)
 
     for i in range(most_roles):
         for member in member_list:
-            #print(member)
             if len(member.roles) <= i:
                 member_list.remove(member)
                 break
@@ -74,14 +77,14 @@ def create_party(day, time, members):
                 party[2] = [member, member.roles[i]]
             elif member.roles[i] == "DPS" and party[3] is None and member.roles[i] not in party:
                 party[3] = [member, member.roles[i]]
-    #print(party)
     return [party, len([x for x in party if x is not None])]
 
+
 def align(members):
-    best_party, best_length = [0], 0
+    best_party, best_length = [], 0
     for day in days_of_players:
         for time in range(24):
-            new_party = create_party(day, time + 1)
+            new_party = create_party(day, time + 1, members)
             if new_party != []:
                 new_length = new_party[1]
                 new_party = new_party[0]
@@ -102,10 +105,18 @@ def align(members):
         members.remove(set_party[i])
 
     return set_party
+
+
 def create_parties(members):
     party_list = []
-    while len(members) > 0:
+    while len(members) > 1:
         party_list.append(align(members))
+        print("Aligning,",len(members))
+    if len(members) == 1:
+        party_list.append(align(members))
+        print("Single member")
+    return party_list
+
 
 def reverse_party(party):
     days = [set(person.days) for person in party]
@@ -128,11 +139,14 @@ def reverse_party(party):
 
     return [day_set, time_set]
 
+
 def end_file(party_list):
     file = open("results.txt", "w").close()
-    file = open("results.txt", "w")
+    file = open("results.txt", "r+")
 
+    print(len(party_list))
     for party in party_list:
+        print("Adding party")
         party_details = reverse_party(party)
 
         days = list(party_details[0])
