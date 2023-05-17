@@ -30,14 +30,13 @@ async def create_player(ctx, name, days, min_hour: discord.Option(int), max_hour
 @bot.slash_command(guild_ids=[os.getenv("GUILD_ID")])
 @guild_only()
 async def form_parties(ctx):
-    file = open("test_player.txt", "r")
-    member_list = sorter.set_members(file, ctx.guild.id)
-    print("Length of member_list:",len(member_list))
+    member_list = sorter.load_players("test_player.json")[str(ctx.guild.id)]
+    print("Length of member_list:", len(member_list))
     parties = sorter.create_parties(member_list)
-    print("Amount of parties:",len(parties))
+    print("Amount of parties:", len(parties))
     output_file = sorter.end_file(parties)
 
-    await ctx.respond(output_file.read())
+    await ctx.respond(output_file)
 
 
 bot.run(os.getenv("TOKEN"))

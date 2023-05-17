@@ -1,6 +1,6 @@
-def start(file):
-    return file.read().split("\n\n")[:-1]
-
+import json
+from typing import List
+from pathlib import Path
 
 days_of_players = {
     "Monday": [],
@@ -14,18 +14,12 @@ days_of_players = {
 
 
 class Player:
-    def __init__(self, informational_paragraph):
-        lines = informational_paragraph.split("\n")
-        lines = [info.split(": ")[1] for info in lines]
-
-        self.name = lines[0]
-        self.guild = lines[1]
-        self.days = lines[2].split(", ")
-        self.times = [int(value) for value in lines[3].split(", ")]
-        self.roles = lines[4].split(", ")
-        if self.days == ['All']:
-            self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    def __init__(self, player_object: object):
+        self.name = player_object["name"]
+        self.times = player_object["times"]
+        self.roles = player_object["roles"]
         self.role = None
+        self.days = days_of_players.keys() if player_object["days"] == ['All'] else player_object["days"]
 
     def __repr__(self):
         return str(self.name) + " (" + str(self.role) + ")"
@@ -43,17 +37,25 @@ class Player:
         return max_time
 
 
-def set_members(file, guild_id):
-    members = []
-    paragraph_array = start(file)
-    for paragraphs in paragraph_array:
-        print("appending...")
-        members.append(Player(paragraphs))
-    print([member for member in members if int(member.guild) == guild_id])
-    return [member for member in members if int(member.guild) == guild_id]
+class Guild:
+    def __init__(self, players: List[Player]):
+        self.players = players
 
 
-def create_party(day, time, members):
+def \
+        load_players(file: str) -> List[Guild]:
+    guilds = []
+
+    with open(file) as file:
+        json_guilds = json.loads(file.read())
+
+    for key in json_guilds.keys():
+        players = [Player(player) for player in json_guilds[key]]
+        guilds.append(Guild(players))
+
+    return guilds
+
+def create_party(day, time, members: List[Player]):
     member_list = [member for member in members if (day in member.days and member.between(time))]
     member_list = sorted(member_list, key=lambda mem: len(mem.roles))
 
@@ -111,7 +113,7 @@ def create_parties(members):
     party_list = []
     while len(members) > 1:
         party_list.append(align(members))
-        print("Aligning,",len(members))
+        print("Aligning,", len(members))
     if len(members) == 1:
         party_list.append(align(members))
         print("Single member")
@@ -122,6 +124,7 @@ def reverse_party(party):
     days = [set(person.days) for person in party]
     set_of_days = set(days_of_players.keys())
     day_set = None
+
     for day in days:
         if day_set is not None:
             set_of_days = set_of_days.intersection(day_set)
@@ -148,6 +151,8 @@ def end_file(party_list):
     for party in party_list:
         print("Adding party")
         party_details = reverse_party(party)
+
+        print(party_details[0])
 
         days = list(party_details[0])
         file.write("Days: " + str(days).replace("'", "")[1:-1])

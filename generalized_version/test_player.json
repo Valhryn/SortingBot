@@ -1,0 +1,22 @@
+{
+  "1081362341767168112": [
+    {
+      "name": "Player Two",
+      "days": ["Monday", "Tuesday"],
+      "times": [6, 18],
+      "roles": "Tank"
+    },
+    {
+      "name": "Player Three",
+      "days": ["Monday"],
+      "times": [3, 8],
+      "roles": "DPS"
+    },
+    {
+      "name": "Player Four",
+      "days": ["Monday"],
+      "times": [0, 7],
+      "roles": "Healer"
+    }
+  ]
+}

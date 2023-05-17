@@ -1,20 +1,5 @@
-Days: Sunday, Thursday
-Times: 18 -> 19
+Days: Monday
+Times: 6 -> 8
 	Player Two (Tank)
-	Player Six (Support)
-	Player One (DPS)
-	Player Four (DPS)
-
-Days: Sunday, Saturday
-Times: 17 -> 24
-	Player Seven (Tank)
-	Player Five (DPS)
-
-Days: Tuesday, Sunday, Thursday, Saturday, Monday, Friday, Wednesday
-Times: 16 -> 19
-	Player Eight (Tank)
-
-Days: Thursday, Friday
-Times: 12 -> 15
-	Player Three (Support)
+	Player 3 (DPS)
 
