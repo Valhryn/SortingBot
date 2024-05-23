@@ -1,7 +1,3 @@
-import json
-from typing import List
-from pathlib import Path
-
 days_of_players = {
     "Monday": [],
     "Tuesday": [],
@@ -14,12 +10,15 @@ days_of_players = {
 
 
 class Player:
-    def __init__(self, player_object: object):
-        self.name = player_object["name"]
-        self.times = player_object["times"]
-        self.roles = player_object["roles"]
+    def __init__(self, player_information):
+        self.name = player_information[0]
+        self.guild = player_information[1]
+        self.days = player_information[2].split(", ")
+        self.times = [player_information[3], player_information[4]]
+        self.roles = player_information[5].split(", ")
+        if self.days == ['All']:
+            self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         self.role = None
-        self.days = days_of_players.keys() if player_object["days"] == ['All'] else player_object["days"]
 
     def __repr__(self):
         return str(self.name) + " (" + str(self.role) + ")"
@@ -36,28 +35,21 @@ class Player:
             max_time += 24
         return max_time
 
-
-class Guild:
-    def __init__(self, players: List[Player]):
-        self.players = players
+    def __eq__(self, other):
+        return self.name == other.name and self.times == other.times and self.days == other.days and self.roles == other.roles and self.guild == other.guild
 
 
-def \
-        load_players(file: str) -> List[Guild]:
-    guilds = []
+def set_members(file):
+    members = []
+    for player in file:
+        members.append(Player(player))
+    return members
 
-    with open(file) as file:
-        json_guilds = json.loads(file.read())
-
-    for key in json_guilds.keys():
-        players = [Player(player) for player in json_guilds[key]]
-        guilds.append(Guild(players))
-
-    return guilds
-
-def create_party(day, time, members: List[Player]):
+def create_party(day, time, members):
     member_list = [member for member in members if (day in member.days and member.between(time))]
     member_list = sorted(member_list, key=lambda mem: len(mem.roles))
+    # print(member_list)
+    # print(member_list)
 
     if len(member_list) == 0:
         return []
@@ -65,9 +57,11 @@ def create_party(day, time, members: List[Player]):
     most_roles = len(max(member_list, key=lambda mem: len(mem.roles)).roles)
     party = [None] * 4
     length = 0
+    # print(party)
 
     for i in range(most_roles):
         for member in member_list:
+            # print(member)
             if len(member.roles) <= i:
                 member_list.remove(member)
                 break
@@ -79,14 +73,15 @@ def create_party(day, time, members: List[Player]):
                 party[2] = [member, member.roles[i]]
             elif member.roles[i] == "DPS" and party[3] is None and member.roles[i] not in party:
                 party[3] = [member, member.roles[i]]
+    # print(party)
     return [party, len([x for x in party if x is not None])]
 
 
 def align(members):
-    best_party, best_length = [], 0
+    best_party, best_length = [0], 0
     for day in days_of_players:
         for time in range(24):
-            new_party = create_party(day, time + 1, members)
+            new_party = create_party(day, time + 1)
             if new_party != []:
                 new_length = new_party[1]
                 new_party = new_party[0]
@@ -111,20 +106,14 @@ def align(members):
 
 def create_parties(members):
     party_list = []
-    while len(members) > 1:
+    while len(members) > 0:
         party_list.append(align(members))
-        print("Aligning,", len(members))
-    if len(members) == 1:
-        party_list.append(align(members))
-        print("Single member")
-    return party_list
 
 
 def reverse_party(party):
     days = [set(person.days) for person in party]
     set_of_days = set(days_of_players.keys())
     day_set = None
-
     for day in days:
         if day_set is not None:
             set_of_days = set_of_days.intersection(day_set)
@@ -145,14 +134,10 @@ def reverse_party(party):
 
 def end_file(party_list):
     file = open("results.txt", "w").close()
-    file = open("results.txt", "r+")
+    file = open("results.txt", "w")
 
-    print(len(party_list))
     for party in party_list:
-        print("Adding party")
         party_details = reverse_party(party)
-
-        print(party_details[0])
 
         days = list(party_details[0])
         file.write("Days: " + str(days).replace("'", "")[1:-1])

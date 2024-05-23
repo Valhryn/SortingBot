@@ -5,3 +5,7 @@ ffxiv_version/dark.txt
 __pycache__
 .idea
 *.db
+
+*.pytest_cache
+
+*.ffxiv_version
