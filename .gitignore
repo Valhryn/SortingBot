@@ -4,3 +4,4 @@ ffxiv_version/dark.txt
 
 __pycache__
 .idea
+*.db
