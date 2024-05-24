@@ -48,16 +48,12 @@ def set_members(file):
 def create_party(day, time, members):
     member_list = [member for member in members if (day in member.days and member.between(time))]
     member_list = sorted(member_list, key=lambda mem: len(mem.roles))
-    # print(member_list)
-    # print(member_list)
 
     if len(member_list) == 0:
         return []
 
     most_roles = len(max(member_list, key=lambda mem: len(mem.roles)).roles)
     party = [None] * 4
-    length = 0
-    # print(party)
 
     for i in range(most_roles):
         for member in member_list:
@@ -73,7 +69,6 @@ def create_party(day, time, members):
                 party[2] = [member, member.roles[i]]
             elif member.roles[i] == "DPS" and party[3] is None and member.roles[i] not in party:
                 party[3] = [member, member.roles[i]]
-    # print(party)
     return [party, len([x for x in party if x is not None])]
 
 
@@ -91,12 +86,6 @@ def align(members):
 
     set_party = [member[0] for member in best_party if member is not None]
     roles = [member[1] for member in best_party if member is not None]
-    # for i in range(4):
-    #     if set_party[i] is not None:
-    #         #print(set_party[i])
-    #         #print(isinstance(set_party[i], Player))
-    #         set_party[i].role = best_party[i]
-    #         members.remove(set_party[i])
     for i in range(len(set_party)):
         set_party[i].role = roles[i]
         members.remove(set_party[i])
@@ -130,8 +119,9 @@ def reverse_party(party):
     time_set = [min_hour, max_hour]
 
     return [day_set, time_set]
-
-
+# maya was here
+# momo's sister hey i sunck on this compyter to play games \
+#      ''
 def end_file(party_list):
     file = open("results.txt", "w").close()
     file = open("results.txt", "w")
