@@ -45,7 +45,8 @@ def set_members(file):
         members.append(Player(player))
     return members
 
-def create_party(day, time, members):
+
+def create_party(day, time, members) -> list[list[Player], int]:
     member_list = [member for member in members if (day in member.days and member.between(time))]
     member_list = sorted(member_list, key=lambda mem: len(mem.roles))
 
@@ -57,7 +58,6 @@ def create_party(day, time, members):
 
     for i in range(most_roles):
         for member in member_list:
-            # print(member)
             if len(member.roles) <= i:
                 member_list.remove(member)
                 break
@@ -76,7 +76,7 @@ def align(members):
     best_party, best_length = [0], 0
     for day in days_of_players:
         for time in range(24):
-            new_party = create_party(day, time + 1)
+            new_party = create_party(day, time + 1, members)
             if new_party != []:
                 new_length = new_party[1]
                 new_party = new_party[0]
@@ -96,7 +96,10 @@ def align(members):
 def create_parties(members):
     party_list = []
     while len(members) > 0:
-        party_list.append(align(members))
+        newParty = align(members)
+        party_list.append(newParty)
+
+    return party_list
 
 
 def reverse_party(party):
@@ -123,20 +126,19 @@ def reverse_party(party):
 # momo's sister hey i sunck on this compyter to play games \
 #      ''
 def end_file(party_list):
-    file = open("results.txt", "w").close()
-    file = open("results.txt", "w")
+    file = ""
 
-    for party in party_list:
-        party_details = reverse_party(party)
-
+    for i in range(len(party_list)):
+        party_details = reverse_party(party_list[i])
+        file += "Party " + str(i + 1)
         days = list(party_details[0])
-        file.write("Days: " + str(days).replace("'", "")[1:-1])
+        file += "\nDays: " + str(days).replace("'", "")[1:-1]
         if party_details[1][1] > 24:
             party_details[1][1] += -24
-        file.write("\nTimes: " + str(party_details[1][0]) + " -> " + str(party_details[1][1]))
-        file.write("\n\t")
+        file += "\nTimes: " + str(party_details[1][0]) + " -> " + str(party_details[1][1])
+        file += "\n\t"
 
-        file.write("\n\t".join(map(str, party)))
+        file += "\n\t".join(map(str, party_list[i]))
 
-        file.write("\n\n")
+        file += "\n\n"
     return file

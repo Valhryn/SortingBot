@@ -33,20 +33,13 @@ async def create_player(ctx, name, days, min_hour: discord.Option(int), max_hour
 @bot.slash_command(guild_ids=[os.getenv("GUILD_ID")])
 @guild_only()
 async def form_parties(ctx):
-    # file = open("players.txt", "w")
-    # member_list = sorter.set_members(file, ctx.guild)
-    # parties = sorter.create_parties(member_list)
-    # file = sorter.end_file(parties)
+    data = database_access.execute(f'SELECT * FROM characters WHERE server={ctx.guild.id}')
+    augh = data.fetchall()
+    member_list = sorter.set_members(augh)
+    parties = sorter.create_parties(member_list)
+    file = sorter.end_file(parties)
 
-    file = open("output.txt", "w")
-    data = database_access.execute(f"SELECT * FROM characters WHERE server MATCH {ctx.guild}")
-    file.write(data)
-    file.close()
-    # member_list = sorter.set_members()
-    # parties = sorter.create_parties(member_list)
-    # file = sorter.end_file(parties)
-
-    await ctx.respond("Parties Created")
+    await ctx.respond(f"{file}Parties Created")
 
 @bot.slash_command(guild_ids=[os.getenv("GUILD_ID")])
 @guild_only()
