@@ -1,6 +1,6 @@
 import os
 import discord
-from discord import guild_only
+from discord import guild_only, default_permissions
 import dotenv
 import sorter
 import sqlite3
@@ -18,7 +18,7 @@ async def on_ready():
     database_access.execute('CREATE TABLE IF NOT EXISTS characters(name TEXT, server INTEGER, days TEXT, min_hour INTEGER, max_hour INTEGER, role TEXT)')
     # For optimization, can query here for characters
 
-@bot.slash_command(guild_ids=[os.getenv("GUILD_ID")])
+@bot.slash_command()
 @guild_only()
 async def create_player(ctx, name, days, min_hour: discord.Option(int), max_hour: discord.Option(int), role):
     server = str(ctx.guild.id)
@@ -30,7 +30,7 @@ async def create_player(ctx, name, days, min_hour: discord.Option(int), max_hour
 
     await ctx.respond(name + " is made!")
 
-@bot.slash_command(guild_ids=[os.getenv("GUILD_ID")])
+@bot.slash_command()
 @guild_only()
 async def form_parties(ctx):
     data = database_access.execute(f'SELECT * FROM characters WHERE server={ctx.guild.id}')
@@ -41,12 +41,17 @@ async def form_parties(ctx):
 
     await ctx.respond(f"{file}Parties Created")
 
-@bot.slash_command(guild_ids=[os.getenv("GUILD_ID")])
+@bot.slash_command()
 @guild_only()
 async def get_players(ctx):
-    await ctx.respond(database_access.execute(f"SELECT * FROM characters").fetchall())
+    current_players = database_access.execute(f"SELECT * FROM characters").fetchall()
+    response = "No players found"
 
-@bot.slash_command(guild_ids=[os.getenv("GUILD_ID")])
+    if current_players:
+        response = current_players
+    await ctx.respond(response)
+
+@bot.slash_command()
 @guild_only()
 async def delete_player(ctx, name):
     delete_statement = "DELETE FROM characters WHERE name = ?"
@@ -55,5 +60,15 @@ async def delete_player(ctx, name):
     players.commit()
 
     await ctx.respond(f"{name} has been deleted")
+
+@bot.slash_command()
+@guild_only()
+@default_permissions(administrator=True)
+async def clear_players(ctx):
+    delete_statement = "DELETE FROM characters WHERE server = ?"
+    database_access.execute(delete_statement, (ctx.guild.id, ))
+
+    players.commit()
+    await ctx.respond("All characters have been deleted")
 
 bot.run(os.getenv("TOKEN"))
