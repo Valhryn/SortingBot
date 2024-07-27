@@ -1,7 +1,0 @@
-Days: Monday
-Times: 6 -> 7
-	Player Two (Tank)
-	Player 4 (Healer)
-	Player 3 (DPS)
-	Player Five (DPS)
-
